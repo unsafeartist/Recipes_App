@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Recipes App</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_load">Load</string>
+    <string name="add_recipeTitle">Add Recipe</string>
+    <string name="addRecipeName">* Add Recipe Name</string>
+    <string name="addIngredientName">* Add Ingredient Name(s)</string>
+    <string name="addServingSize">* Add Serving Size</string>
+    <string name="veganOption">Vegan</string>
+    <string name="vegetarianOption">Vegetarian</string>
+    <string name="glutenFree">Gluten Free</string>
+    <string name="button_save">Save</string>
+    <string name="quantityIngredient">Quantity</string>
+
+    <!--For Drop Down Menu when inserting ingredients into "Add a Recipe" section-->
+    <string-array name="measurements_array">
+        <item>cup</item>
+        <item>fl oz</item>
+        <item>oz</item>
+        <item>pint</item>
+        <item>gram</item>
+    </string-array>
+    <string name="dropDownMenuMeasurmentsButton">dropDownMenuMeasurements</string>
+
+</resources>
