@@ -191,8 +191,14 @@ public class AddRecipePage extends AppCompatActivity {
                         temp_veganCheckBoxInput, temp_vegetarianCheckBoxInput, temp_glutenFreeCheckBoxInput, temp_nutritionalInformationToggle);
             }
 
+           //Insert into SQLiteDatabase here
+           //At this point the recipe is neatly stored into an object
+           DatabaseHelper myDB = new DatabaseHelper(AddRecipePage.this);
+            myDB.addRecipe(input_recipe.getName_recipe(), input_recipe.getName_ingredient(), input_recipe.getNum_servings(),
+                    temp_veganCheckBoxInput, temp_vegetarianCheckBoxInput,temp_glutenFreeCheckBoxInput, temp_nutritionalInformationToggle, input_recipe.getCalories(),
+                    input_recipe.getTotal_fat(), input_recipe.getTotal_carbs(), input_recipe.getTotal_protein());
 
-            writeToFile(FILE_NAME, input_recipe);
+           // writeToFile(FILE_NAME, input_recipe);
         }
         catch(NumberFormatException invalid_quantityFormatEntered)
         {
@@ -204,12 +210,16 @@ public class AddRecipePage extends AppCompatActivity {
 
     }
 
+
     /*
+    TEMPORARILY TAKE OUT WHILE TRYING TO IMPLEMENT SQL LITE DATABASE
+
+
     @author Kamaljot Saini
         Pre: Pre-Existing File, if no pre_existing file then the method wil create on based on "file_nameInput"
         Post: Will append given data to end of "FILE_NAME" text file
         PS: Passing view object to this method allows it to become clickable in UI attributes section
-    */
+
     public void writeToFile(String input_fileName, Recipes input_recipeObject)
     {
         //String outputText_forFile = editText_object.getText().toString();
@@ -240,5 +250,10 @@ public class AddRecipePage extends AppCompatActivity {
         }
 
     } //End Method
+
+    */
+
+
+
 
 } //End Class "AddRecipePage"
