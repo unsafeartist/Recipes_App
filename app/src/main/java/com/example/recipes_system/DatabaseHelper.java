@@ -2,6 +2,7 @@ package com.example.recipes_system;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
@@ -89,5 +90,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Toast.makeText(context, "Added Recipe Successfully to Database!", Toast.LENGTH_SHORT).show();
 
 
+    }
+
+    Cursor readAllData(){
+        String query = "SELECT * FROM " + TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null){
+            db.rawQuery(query, null);
+        }
+        return cursor;
     }
 }
