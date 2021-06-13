@@ -1,6 +1,8 @@
 package com.example.recipes_system;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.recipes_system.R;
 
@@ -23,13 +26,14 @@ import java.util.List;
 
 public class RecipesHomepage extends AppCompatActivity {
     //Declare local variables/objects
-    HashMap<String, Recipes> loadFile_hashMap = new HashMap<String, Recipes>();
-    private static final String FILE_NAME = "epsilonNutritionApp_USER_RECIPES.txt";
     RecyclerView recyclerView_object;
     recipesHomepage_recyclerViewer_searchBar_ADAPTER recipesList_Adapter;
-    RecyclerView.LayoutManager recipesList_layoutManager;
-    List<Recipes> recipesList_arrayList = new ArrayList<>();
-    SearchView searchBarRecipesHomepage;
+
+    DatabaseHelper recipes_database;
+    ArrayList<String> recipe_name_ArrayList, ingredients_ArrayList;
+    ArrayList<Boolean> vegan_ArrayList, vegetarian_ArrayList, gluten_free_ArrayList, nutritional_information__ArrayList;
+    ArrayList<Integer> serving_size_ArrayList, calories_ArrayList, fat_ArrayList, carbs_ArrayList, protein_ArrayList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +43,6 @@ public class RecipesHomepage extends AppCompatActivity {
         //This prevents the keyboard from automatically opening up upon creation of activity
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        //Load all the recipes for viewing and into various data structures
-        load_Recipes();
-
-        setUp_scrollableRecipesRecyclerViewer();
-        setUp_recipesSearchBarFunctionality();
 
         //Create button object for activity 2
         Button addRecipe_buttonObject = findViewById(R.id.addRecipeButton);
@@ -56,22 +54,61 @@ public class RecipesHomepage extends AppCompatActivity {
             }
         });
 
+        //Load all the recipes for viewing and into various data structures
+        //load_Recipes();
+        recipes_database =  new DatabaseHelper(RecipesHomepage.this);
+        recipe_name_ArrayList = new ArrayList<>();
+        ingredients_ArrayList = new ArrayList<>();
+        serving_size_ArrayList = new ArrayList<>();
+        vegan_ArrayList = new ArrayList<>();
+        vegetarian_ArrayList = new ArrayList<>();
+        gluten_free_ArrayList = new ArrayList<>();
+        nutritional_information__ArrayList = new ArrayList<>();
+        calories_ArrayList = new ArrayList<>();
+        fat_ArrayList = new ArrayList<>();
+        carbs_ArrayList = new ArrayList<>();
+        protein_ArrayList = new ArrayList<>();
+
+        //This function stores all recipes database data into usable ArrayLists
+        insertRecipes_intoArrayLists();
+
+        setUp_scrollableRecipesRecyclerViewer();
+
+        //setUp_recipesSearchBarFunctionality();
+
     } // End on Create
 
     //Sets up the recycler viewer
     private void setUp_scrollableRecipesRecyclerViewer(){
-        recyclerView_object = findViewById(R.id.recipesRecyclerView);
+        recipesList_Adapter = new recipesHomepage_recyclerViewer_searchBar_ADAPTER(this,
+                recipe_name_ArrayList,
+                ingredients_ArrayList,
+                serving_size_ArrayList,
+                vegan_ArrayList,
+                vegetarian_ArrayList,
+                gluten_free_ArrayList,
+                nutritional_information__ArrayList,
+                calories_ArrayList,
+                fat_ArrayList,
+                carbs_ArrayList,
+                protein_ArrayList);
+
+
+        recyclerView_object = (RecyclerView) findViewById(R.id.recipesRecyclerView);
         recyclerView_object.setHasFixedSize(true);
 
-        //By default this is vertical recyclerView in LinearLayout
-        recipesList_layoutManager = new LinearLayoutManager(this);
-        recyclerView_object.setLayoutManager(recipesList_layoutManager);
-
-        recipesList_Adapter = new recipesHomepage_recyclerViewer_searchBar_ADAPTER(this, recipesList_arrayList);
         recyclerView_object.setAdapter(recipesList_Adapter);
+
+        //By default this is vertical recyclerView in LinearLayout
+        //recipesList_layoutManager = new LinearLayoutManager(this);
+        recyclerView_object.setLayoutManager(new LinearLayoutManager(this));
+
+
     }
 
-    private void setUp_recipesSearchBarFunctionality(){
+    /*
+
+     private void setUp_recipesSearchBarFunctionality(){
         //Connect to searchBar in Recipes Homepage
         searchBarRecipesHomepage = findViewById(R.id.searchRecipesView);
 
@@ -98,13 +135,16 @@ public class RecipesHomepage extends AppCompatActivity {
                 This makes it so user can click anywhere on the search
                 bar and it will be clickable, instead of having to click
                 the icon to start the search
-                 */
+
                 searchBarRecipesHomepage.setIconified(false);
-            }
+}
 
         });
 
-    }
+                }
+
+     */
+
 
     public void openAddRecipePage()
     {
@@ -112,12 +152,44 @@ public class RecipesHomepage extends AppCompatActivity {
         startActivity(intent);
     }
 
+    void insertRecipes_intoArrayLists(){
+        Cursor cursor = recipes_database.readAllData();
+
+        if(cursor.getCount() == 0)
+            Toast.makeText(this, "No Recipes Found in Database!", Toast.LENGTH_LONG).show();
+        else{
+            while(cursor.moveToNext()){
+                recipe_name_ArrayList.add(cursor.getString(1));
+                ingredients_ArrayList.add(cursor.getString(2));
+                serving_size_ArrayList.add(cursor.getInt(3));
+                vegan_ArrayList.add(toBoolean(cursor.getInt(4)));
+                vegetarian_ArrayList.add(toBoolean(cursor.getInt(5)));
+                gluten_free_ArrayList.add(toBoolean(cursor.getInt(6)));
+                nutritional_information__ArrayList.add(toBoolean(cursor.getInt(7)));
+                calories_ArrayList.add(cursor.getInt(8));
+                fat_ArrayList.add(cursor.getInt(9));
+                carbs_ArrayList.add(cursor.getInt(10));
+                protein_ArrayList.add(cursor.getInt(11));
+            }
+        }
+    }
+
+    //Simple integer to boolean conversion function
+    Boolean toBoolean(int input_integer){
+        if(input_integer == 1)
+            return true;
+        else
+            return false;
+    }
+
     /*
+
+
        @author Kamaljot Saini
        Load the recipes into input HashMap
        PS Remember objects are passed by reference, so
        technically the object itself is being mutated
-    */
+
     public void load_Recipes()
     {
         //Declare local variables/objects
@@ -360,5 +432,8 @@ public class RecipesHomepage extends AppCompatActivity {
             }
         }
     } //End Method "Load File"
+
+     */
+
 
 } //End class "RecipesHomepage"

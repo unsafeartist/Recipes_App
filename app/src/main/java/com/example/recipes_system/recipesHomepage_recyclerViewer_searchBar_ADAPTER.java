@@ -13,10 +13,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class recipesHomepage_recyclerViewer_searchBar_ADAPTER extends RecyclerView.Adapter<recipesHomepage_recyclerViewer_searchBar_ADAPTER.RecipeViewHolder> implements Filterable {
+public class recipesHomepage_recyclerViewer_searchBar_ADAPTER extends RecyclerView.Adapter<recipesHomepage_recyclerViewer_searchBar_ADAPTER.RecipeViewHolder>{
     private Context context_object;
-    private List<Recipes> recipesList;
-    private List<Recipes> recipesList_copy; //For search functionality
+
+    private ArrayList<String> recipe_name_ArrayList, ingredients_ArrayList;
+    private ArrayList<Boolean> vegan_ArrayList, vegetarian_ArrayList, gluten_free_ArrayList, nutritional_information__ArrayList;
+    private ArrayList<Integer> serving_size_ArrayList, calories_ArrayList, fat_ArrayList, carbs_ArrayList, protein_ArrayList;
 
     /*
         Provide a reference to the views for each data item
@@ -45,10 +47,33 @@ public class recipesHomepage_recyclerViewer_searchBar_ADAPTER extends RecyclerVi
     }
 
     //Constructor
-    public recipesHomepage_recyclerViewer_searchBar_ADAPTER(Context input_contextObject, List<Recipes> inputRecipes_list) {
+    public recipesHomepage_recyclerViewer_searchBar_ADAPTER(Context input_contextObject,
+                                                            ArrayList<String> recipe_name_ArrayList,
+                                                            ArrayList<String> ingredients_ArrayList,
+                                                            ArrayList<Integer> serving_size_ArrayList,
+                                                            ArrayList<Boolean> vegan_ArrayList,
+                                                            ArrayList<Boolean> vegetarian_ArrayList,
+                                                            ArrayList<Boolean> gluten_free_ArrayList,
+                                                            ArrayList<Boolean> nutritional_information__ArrayList,
+                                                            ArrayList<Integer> calories_ArrayList,
+                                                            ArrayList<Integer> fat_ArrayList,
+                                                            ArrayList<Integer> carbs_ArrayList,
+                                                            ArrayList<Integer> protein_ArrayList) {
         this.context_object = input_contextObject;
-        this.recipesList = inputRecipes_list;
-        recipesList_copy = new ArrayList<>(recipesList); //Makes a copy of recipes list
+        this.recipe_name_ArrayList = recipe_name_ArrayList;
+        this.ingredients_ArrayList = ingredients_ArrayList;
+        this.serving_size_ArrayList = serving_size_ArrayList;
+        this.vegan_ArrayList = vegan_ArrayList;
+        this.vegetarian_ArrayList = vegetarian_ArrayList;
+        this.gluten_free_ArrayList = gluten_free_ArrayList;
+        this.nutritional_information__ArrayList = nutritional_information__ArrayList;
+        this.calories_ArrayList = calories_ArrayList;
+        this.fat_ArrayList = fat_ArrayList;
+        this.carbs_ArrayList = carbs_ArrayList;
+        this.protein_ArrayList = protein_ArrayList;
+
+
+        //recipesList_copy = new ArrayList<>(recipesList); //Makes a copy of recipes list
     }
 
     // Create new views (invoked by the layout manager)
@@ -75,25 +100,29 @@ public class recipesHomepage_recyclerViewer_searchBar_ADAPTER extends RecyclerVi
     public void onBindViewHolder(RecipeViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        Recipes recipe_object = recipesList.get(position);
+        //Recipes recipe_object = recipesList.get(position);
 
-        holder.recipe_name.setText(recipe_object.getName_recipe());
-        holder.ingredient_names.setText(recipe_object.getName_ingredient().toLowerCase());
-        holder.serving_size.setText(String.valueOf(recipe_object.getNum_servings()));
-        holder.vegan_checkBox.setChecked(recipe_object.isVeganFlag());
-        holder.vegetarian_checkBox.setChecked(recipe_object.isVegetarianFlag());
-        holder.glutenFree_checkBox.setChecked(recipe_object.isGlutenFreeFlag());
-        holder.calories.setText(String.valueOf(recipe_object.getCalories()));
-        holder.total_fat.setText(String.valueOf(recipe_object.getTotal_fat()));
-        holder.total_carbs.setText(String.valueOf(recipe_object.getTotal_carbs()));
-        holder.total_protein.setText(String.valueOf(recipe_object.getTotal_protein()));
+        holder.recipe_name.setText(String.valueOf(recipe_name_ArrayList.get(position)));
+        holder.ingredient_names.setText(String.valueOf(ingredients_ArrayList.get(position)));
+        holder.serving_size.setText(Integer.valueOf(serving_size_ArrayList.get(position)).toString());
+        holder.vegan_checkBox.setChecked(Boolean.valueOf(vegan_ArrayList.get(position)));
+        holder.vegetarian_checkBox.setChecked(Boolean.valueOf(vegetarian_ArrayList.get(position)));
+        holder.glutenFree_checkBox.setChecked(Boolean.valueOf(gluten_free_ArrayList.get(position)));
+        holder.calories.setText(Integer.valueOf(calories_ArrayList.get(position)).toString());
+        holder.total_fat.setText(Integer.valueOf(fat_ArrayList.get(position)).toString());
+        holder.total_carbs.setText(Integer.valueOf(carbs_ArrayList.get(position)).toString());
+        holder.total_protein.setText(Integer.valueOf(protein_ArrayList.get(position)).toString());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
+    //Doesn't matter what arraylist we use since they're all the same size anyway
     @Override
     public int getItemCount() {
-        return recipesList.size();
+        return recipe_name_ArrayList.size();
     }
+
+    /*
+
 
     //Filtering for real-time search results
     @Override
@@ -133,5 +162,7 @@ public class recipesHomepage_recyclerViewer_searchBar_ADAPTER extends RecyclerVi
             recipesList.addAll((List) results.values);
             notifyDataSetChanged();
         }
-    };
-}
+     */
+
+
+};

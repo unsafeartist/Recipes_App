@@ -93,13 +93,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     Cursor readAllData(){
+        //This selects all data from our recipes table
         String query = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
 
+        //Check to see if there is any data present within the database
         Cursor cursor = null;
         if(db != null){
-            db.rawQuery(query, null);
+            cursor = db.rawQuery(query, null);
         }
+
+        //The cursor should contain all data from recipes SQLiteDatabase
         return cursor;
     }
 }
